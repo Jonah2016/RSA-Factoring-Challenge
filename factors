@@ -1,30 +1,33 @@
 #!/usr/bin/python3
-"""This factorizes nums in a file to products of two small numbers."""
+"""Module that factorize as many numbers as possible
+ into a product of two smaller numbers."""
 from sys import argv
 
-def factorize_func(unknown_num):
-    """Get two small numbers and multiply to get another number."""
-    if unknown_num < 2:
-        return
 
+def factorize(value):
+    """"print a simple descomposition of an integer > 1"""
     i = 2
-    while i * i <= unknown_num:
-        if unknown_num % i:
-            i += 1
-        else:
-            unknown_num //= i
-            print(f"{unknown_num * i} = {unknown_num} * {i}")
 
-    if unknown_num > 1:
-        print(f"{unknown_num} = {unknown_num} * 1")
+    if value < 2:
+        return
+    print()
+    print(value, "<- value-bef")
+    while value % i:
+        i += 1
+    print("{:.0f}={:.0f}*{:.0f}".format(value, value / i, i))
+    print(value, "<- value-aft")
+    print()
 
 if len(argv) != 2:
-    exit("Usage: ./script.py filename")
+    exit()
 
 try:
     with open(argv[1]) as file:
-        for line in file:
-            unknown_num = int(line.strip())
-            factorize_func(unknown_num)
-except Exception as e:
-    print(f"An error occurred: {e}")
+        line = file.readline()
+
+        while line != "":
+            value = int(line.split('\n')[0])
+            factorize(value)
+            line = file.readline()
+except:
+    pass
