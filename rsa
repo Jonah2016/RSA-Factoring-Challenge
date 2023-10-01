@@ -1,32 +1,69 @@
 #!/usr/bin/python3
-# library to get arguments
+
+import time
+import math
 import sys
 
+#implementing Pollard rho algorithm
 
-# fn unpack number factorial
-def fc():
-    """
-    function fc to search file to convert number and format n=p*q
-    """
+def poll_rho(num):
+    if num % 2 == 0:
+        return 2
+    
+    x = 2
+    y = 2
+    d = 1
+    
+    func = lambda x: (x**2 + 1) % num
+    
+    while d == 1:
+        x = func(x)
+        y = func(func(y))
+        d = math.gcd(abs(x - y), num)
+    
+    return d
+
+def ifprime(num):
+
+    if num < 2:
+        return False
+    for el in range(2, int(math.sqrt(num)) + 1):
+        if num % el == 0:
+            return False
+    return True
+
+def main():
+
+    if len(sys.argv) != 2:
+        print("Usage: python factorize.py <file>")
+        return
+
+    file_dest = sys.argv[1]
+
+    begin_time = time.time()
     try:
-        revfile = sys.argv[1]
-        with open(revfile) as f:
-            for revnumber in f:
-                revnumber = int(revnumber)
-                if revnumber % 2 == 0:
-                        print("{}={}*{}".format(revnumber, revnumber // 2, 2))
-                        continue
-                i = 3
-                while i < revnumber // 2:
-                    if revnumber % i == 0:
-                        print("{}={}*{}".format(revnumber, revnumber // i, i))
-                        break
-                    i = i + 2
-                if i == (revnumber // 2) + 1:
-                    print("{}={}*{}".format(revnumber, revnumber, 1))
-    except (IndexError):
-        pass
+        with open(file_dest, 'r') as file:
+
+            num1 = int(file.readline().strip())
+
+        p = poll_rho(num1)
+
+        while not ifprime(p):
+            p = poll_rho(p)
+        q = num1 // p
+
+        if p == num1 or q == num1:
+            print(f"{num1} is prime.")
+        else:
+            print(f"{num1}={p}*{q}")
+
+        if time.time() - begin_time > 5:
+            print("Time limit exceeded")
+            exit()
+    
+    except FileNotFoundError:
+        print(f"File '{file_dest}' not found.")
 
 
-# autostart
-fc()
+if __name__ == '__main__':
+    main()
