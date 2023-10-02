@@ -1,49 +1,31 @@
 #!/usr/bin/python3
 """
-Factorize a unkown_num num into two prime numbers p and q.
+factorize func that gets nums in a file into a product of 2 prime nums
 """
-
 import sys
 
-def is_prime(unkown_num):
-    """Check if a unkown_num is prime."""
-    if unkown_num <= 1:
-        return False
-    if unkown_num <= 3:
-        return True
-    if unkown_num % 2 == 0 or unkown_num % 3 == 0:
-        return False
-    i = 5
-    while i * i <= unkown_num:
-        if unkown_num % i == 0 or unkown_num % (i + 2) == 0:
-            return False
-        i += 6
-    return True
-
 def factorize_func():
-    """Factorize the given numbers into two prime numbers p and q."""
+    """
+    A factorize the given nums to two prime nums using (format n = p*q)
+    """
     try:
-        file_name = sys.argv[1]
-        with open(file_name) as file:
-            for line_number in file:
-                num = int(line_number)
-                if num % 2 == 0:
-                    p = 2
-                    q = num // 2
-                else:
-                    i = 3
-                    while True:
-                        if num % i == 0 and is_prime(i):
-                            p = i
-                            q = num // i
-                            break
-                        i += 2
-                
-                if is_prime(p) and is_prime(q):
-                    print(f"{num} = {p} * {q}")
-
-    except (IndexError, ValueError, FileNotFoundError):
+        file = sys.argv[1]
+        with open(file) as f:
+            for line_number in f:
+                line_number = int(line_number)
+                if line_number % 2 == 0:
+                        print("{}={}*{}".format(line_number, line_number // 2, 2))
+                        continue
+                i = 3
+                while i < line_number // 2:
+                    if line_number % i == 0:
+                        print("{}={}*{}".format(line_number, line_number // i, i))
+                        break
+                    i = i + 2
+                if i == (line_number // 2) + 1:
+                    print("{}={}*{}".format(line_number, line_number, 1))
+    except (IndexError):
         pass
 
-factorize_func()
 
+factorize_func()
