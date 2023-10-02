@@ -1,35 +1,29 @@
 #!/usr/bin/python3
-"""Module that factorize as many numbers as possible
- into a product of two smaller numbers."""
+"""the script will factorize a set of num in file to product of two small nums"""
 from sys import argv
 
 
-def factorize(value):
-    """"print a simple descomposition of an integer > 1"""
+def factorize_func(unkown_num):
+    """"get two small nums and multiply to get another num"""
     i = 2
 
-    if value < 2:
+    if unkown_num < 2:
         return
-    print()
-    print(value, "<- value-bef")
-    while value % i:
+    
+    while unkown_num % i:
         i += 1
-    print("{:.0f}={:.0f}*{:.0f}".format(value, value / i, i))
-    print(value, "<- value-aft")
-    print()
-
+    print("{:.0f}={:.0f}*{:.0f}".format(unkown_num, unkown_num / i, i))
 
 if len(argv) != 2:
     exit()
 
-
 try:
     with open(argv[1]) as file:
-        line = file.readline()
+        ln = file.readline()
 
-        while line != "":
-            value = int(line.split('\n')[0])
-            factorize(value)
+        while ln != "":
+            unkown_num = int(line.split('\n')[0])
+            factorize_func(unkown_num)
             line = file.readline()
-except (IndexError, ValueError, FileNotFoundError):
+except:
     pass
