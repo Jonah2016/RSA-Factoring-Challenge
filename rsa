@@ -1,69 +1,49 @@
 #!/usr/bin/python3
+"""
+Factorize a unkown_num num into two prime numbers p and q.
+"""
 
-import time
-import math
 import sys
 
-#implementing Pollard rho algorithm
-
-def poll_rho(num):
-    if num % 2 == 0:
-        return 2
-    
-    x = 2
-    y = 2
-    d = 1
-    
-    func = lambda x: (x**2 + 1) % num
-    
-    while d == 1:
-        x = func(x)
-        y = func(func(y))
-        d = math.gcd(abs(x - y), num)
-    
-    return d
-
-def ifprime(num):
-
-    if num < 2:
+def is_prime(unkown_num):
+    """Check if a unkown_num is prime."""
+    if unkown_num <= 1:
         return False
-    for el in range(2, int(math.sqrt(num)) + 1):
-        if num % el == 0:
+    if unkown_num <= 3:
+        return True
+    if unkown_num % 2 == 0 or unkown_num % 3 == 0:
+        return False
+    i = 5
+    while i * i <= unkown_num:
+        if unkown_num % i == 0 or unkown_num % (i + 2) == 0:
             return False
+        i += 6
     return True
 
-def main():
-
-    if len(sys.argv) != 2:
-        print("Usage: python factorize.py <file>")
-        return
-
-    file_dest = sys.argv[1]
-
-    begin_time = time.time()
+def factorize_func():
+    """Factorize the given numbers into two prime numbers p and q."""
     try:
-        with open(file_dest, 'r') as file:
+        file_name = sys.argv[1]
+        with open(file_name) as file:
+            for line_number in file:
+                num = int(line_number)
+                if num % 2 == 0:
+                    p = 2
+                    q = num // 2
+                else:
+                    i = 3
+                    while True:
+                        if num % i == 0 and is_prime(i):
+                            p = i
+                            q = num // i
+                            break
+                        i += 2
+                
+                if is_prime(p) and is_prime(q):
+                    print(f"{num} = {p} * {q}")
 
-            num1 = int(file.readline().strip())
+    except (IndexError, ValueError, FileNotFoundError):
+        pass
 
-        p = poll_rho(num1)
+factorize_func()
 
-        while not ifprime(p):
-            p = poll_rho(p)
-        q = num1 // p
-
-        if p == num1 or q == num1:
-            print(f"{num1} is prime.")
-        else:
-            print(f"{num1}={p}*{q}")
-
-        if time.time() - begin_time > 5:
-            print("Time limit exceeded")
-            exit()
-    
-    except FileNotFoundError:
-        print(f"File '{file_dest}' not found.")
-
-
-if __name__ == '__main__':
-    main()
