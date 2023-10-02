@@ -18,8 +18,10 @@ def factorize(value):
     print(value, "<- value-aft")
     print()
 
+
 if len(argv) != 2:
     exit()
+
 
 try:
     with open(argv[1]) as file:
@@ -29,5 +31,5 @@ try:
             value = int(line.split('\n')[0])
             factorize(value)
             line = file.readline()
-except:
+except (IndexError, ValueError, FileNotFoundError):
     pass
